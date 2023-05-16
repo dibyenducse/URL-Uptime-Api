@@ -6,14 +6,13 @@ Bloombrain
 
 //Dependencies
 const http = require('http');
-const { config } = require('process');
-
+const { handleReqRes } = require('./helpers/handleReqRes');
 // App object- module scaffolfing
 const app = {};
 
 //configuration
 app.config = {
-    port: 3000,
+    port: 8000,
 };
 
 // create server
@@ -25,12 +24,8 @@ app.createServer = () => {
     });
 };
 
-//handle Req Res
-app.handleReqRes = (req, res) => {
-    //response handle
-    res.end('hello world');
-};
+//handle Req and Res
+app.handleReqRes = handleReqRes;
 
 //start the server
-
 app.createServer();
