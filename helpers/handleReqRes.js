@@ -47,9 +47,10 @@ handler.handleReqRes = (req, res) => {
     //collect real data
     let realData = '';
 
-    const chosenHandler = routes[trimmedPath]
+    var chosenHandler = routes[trimmedPath]
         ? routes[trimmedPath]
         : notFoundHandler;
+    //var chosenHandler = routes[trimmedPath] || notFoundHandler;
 
     chosenHandler(requestProperties, (statusCode, payload) => {
         statusCode = typeof statusCode === 'number' ? statusCode : 500;
