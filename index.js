@@ -14,14 +14,9 @@ const app = {};
 
 //For testing
 
-data.update(
-    'test',
-    'newFile',
-    { name: 'England', language: 'English' },
-    (err) => {
-        console.log(err);
-    }
-);
+data.delete('test', 'newFile', (err) => {
+    console.log(err);
+});
 
 //configuration
 app.config = {
