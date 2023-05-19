@@ -14,9 +14,14 @@ const app = {};
 
 //For testing
 
-data.read('test', 'newFile', (err, data) => {
-    console.log(err, data);
-});
+data.update(
+    'test',
+    'newFile',
+    { name: 'England', language: 'English' },
+    (err) => {
+        console.log(err);
+    }
+);
 
 //configuration
 app.config = {
