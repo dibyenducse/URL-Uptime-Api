@@ -14,9 +14,20 @@ const app = {};
 
 //For testing
 
+data.create(
+    'test',
+    'newText',
+    { name: 'dibbo', language: 'JavaScript' },
+    (err) => {
+        console.log(err);
+    }
+);
+
+/*
 data.delete('test', 'newFile', (err) => {
     console.log(err);
 });
+*/
 
 //configuration
 app.config = {
