@@ -14,14 +14,9 @@ const app = {};
 
 //For testing
 
-data.create(
-    'test',
-    'newFile',
-    { name: 'Bangladesh', language: 'Bangla' },
-    (err) => {
-        console.log(err);
-    }
-);
+data.read('test', 'newFile', (err, data) => {
+    console.log(err, data);
+});
 
 //configuration
 app.config = {
