@@ -7,9 +7,21 @@ Bloombrain
 //Dependencies
 const http = require('http');
 const { handleReqRes } = require('./helpers/handleReqRes');
-const data = require('./lib/.data');
+const data = require('./lib/data');
+
 // App object- module scaffolfing
 const app = {};
+
+//For testing
+
+data.create(
+    'test',
+    'newFile',
+    { name: 'Bangladesh', language: 'Bangla' },
+    (err) => {
+        console.log(err);
+    }
+);
 
 //configuration
 app.config = {

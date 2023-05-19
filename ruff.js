@@ -1,11 +1,11 @@
-function display(some) {
-    console.log(some);
-}
+// function display(some) {
+//     console.log(some);
+// }
 
-function sum(a, s, callback) {
-    let c = a + s;
-    return c;
-}
+// function sum(a, s, callback) {
+//     let c = a + s;
+//     return c;
+// }
 
-//const result =
-console.log(sum(5, 5));
+// //const result =
+// console.log(sum(5, 5));
