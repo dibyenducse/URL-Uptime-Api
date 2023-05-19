@@ -7,7 +7,7 @@ Bloombrain
 //Dependencies
 const http = require('http');
 const { handleReqRes } = require('./helpers/handleReqRes');
-
+const data = require('./lib/data');
 // App object- module scaffolfing
 const app = {};
 
