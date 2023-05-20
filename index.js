@@ -13,7 +13,7 @@ const data = require('./lib/data');
 const app = {};
 
 //For testing
-
+/*
 data.create(
     'test',
     'newText',
@@ -22,7 +22,7 @@ data.create(
         console.log(err);
     }
 );
-
+*/
 /*
 data.delete('test', 'newFile', (err) => {
     console.log(err);
