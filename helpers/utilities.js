@@ -1,11 +1,12 @@
 /*
 Title: Utilities
-Description: Handle all the Utilities from here
+Description: Important utilities functions
 Author:Dibyendu 
 */
 
 //Dependencies
-
+const crypto = require('crypto');
+const enviroment = require('./enviroment');
 //module skuffolding
 const utilities = {};
 
@@ -18,6 +19,17 @@ utilities.parseJSON = (jsonString) => {
     } catch {
         output = {};
     }
+    return output;
 };
+
+// Hashing
+utilities.hash = (str) => {
+    if (typeof str === 'string' && str.length > 0) {
+        let hash = crypto.createHmac('shah', enviroment[process.env.NODE_ENV].secretKey);
+        .updates(str)
+        .digest('hex')
+    }
+};
+
 //export module
 module.exports = parseJSON;
