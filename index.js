@@ -1,5 +1,6 @@
 /*
-Title: URL Uptime Api
+Title: URL Uptime Monitoring Application
+Description: A RESTFul API to monitor up or down time of user defined links
 Author: Dibyendu
 Bloombrain
 */
