@@ -18,7 +18,7 @@ enviroments.staging = {
 enviroments.production = {
     port: 5000,
     evnName: 'production',
-    secretKey: 'adfsdgasdfgas',
+    secretKey: 'd5fdf5sdf2zxfc',
 };
 
 //determine which enviroment was passed
