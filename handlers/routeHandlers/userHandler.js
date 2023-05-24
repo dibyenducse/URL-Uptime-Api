@@ -54,13 +54,13 @@ handler._users.post = (requestProperties, callback) => {
             : false;
     const tosAgreement =
         typeof requestProperties.body.tosAgreement === 'boolean' &&
-        requestProperties.body.tosAgreement.trim().length > 0
+        requestProperties.body.tosAgreement.length > 0
             ? requestProperties.body.tosAgreement
-            : flase;
+            : false;
 
     if (firstName && lastName && phone && password && tosAgreement) {
         //make sure that user doesn't exist
-        data.read('user', phone, (err) => {
+        data.read('users', phone, (err) => {
             if (err) {
                 let userObject = {
                     firstName,
@@ -69,6 +69,7 @@ handler._users.post = (requestProperties, callback) => {
                     password: hash(password),
                     tosAgreement,
                 };
+
                 //store the user to DB
                 data.create('users', phone, userObject, (err) => {
                     if (!err) {
