@@ -74,8 +74,8 @@ handler.handleReqRes = (req, res) => {
             res.end(payloadString);
         });
 
-        console.log(realData);
-        res.end('Hello World');
+        // console.log(realData);
+        // res.end('Hello World');
     });
 };
 module.exports = handler;

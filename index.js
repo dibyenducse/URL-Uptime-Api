@@ -32,9 +32,9 @@ data.delete('test', 'newFile', (err) => {
 */
 
 //configuration
-app.config = {
-    port: 2000,
-};
+// app.config = {
+//     port: 2000,
+// };
 
 // create server
 
