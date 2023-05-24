@@ -6,7 +6,7 @@ Author:Dibyendu
 
 //Dependencies
 const crypto = require('crypto');
-const enviroment = require('./enviroment');
+const enviroments = require('./enviroments');
 //module skuffolding
 const utilities = {};
 
@@ -24,10 +24,15 @@ utilities.parseJSON = (jsonString) => {
 
 // Hashing
 utilities.hash = (str) => {
-    if (typeof str === 'string' && str.length > 0) {
-        let hash = crypto.createHmac('shah', enviroment[process.env.NODE_ENV].secretKey);
-        .updates(str)
-        .digest('hex')
+    if (typeof (str) === 'string' && str.length > 0) {
+        console.log(enviroments,process.env.NODE_ENV)
+        let hash = crypto
+            .createHmac('shah', enviroments.secretKey);
+            .update(str)
+            .digest('hex')
+        return hash;
+    } else {
+        return false;
     }
 };
 

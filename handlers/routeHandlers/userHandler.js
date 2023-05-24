@@ -7,6 +7,7 @@ Author:Dibyendu
 
 //dependencies
 const data = require('../../lib/data');
+const { hash } = require('../../helpers/utilities');
 
 //module skuffloding
 const handler = {};
@@ -62,8 +63,24 @@ handler._users.post = (requestProperties, callback) => {
 
     if (firstName && lastName && phone && password && tosAgreement) {
         //make sure that user doesn't exist
-        data.read('user', phone, (err, user) => {
+        data.read('user', phone, (err) => {
             if (err) {
+                let userObject = {
+                    firstName,
+                    lastName,
+                    phone,
+                    password: hash(password),
+                    tosAgreement,
+                };
+                data.create('users', phone, userObject, (err) => {
+                    if (!err) {
+                        callback(200, {
+                            message: 'User was created successfully',
+                        });
+                    } else {
+                        callback(500, { error: 'Could not create user!' });
+                    }
+                });
             } else {
                 callback(500, {
                     error: 'There was a problem',
