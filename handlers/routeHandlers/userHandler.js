@@ -16,10 +16,7 @@ handler.userHandler = (requestProperties, callback) => {
     const acceptedMethods = ['put', 'get', 'post', 'delete'];
     //check the methods
     if (acceptedMethods.indexOf(requestProperties.method) > -1) {
-        handleReqRes._users[requestProperties.method](
-            requestProperties,
-            callback
-        );
+        handler._users[requestProperties.method](requestProperties, callback);
     } else {
         callback(405); //request don't allow
     }
@@ -72,6 +69,7 @@ handler._users.post = (requestProperties, callback) => {
                     password: hash(password),
                     tosAgreement,
                 };
+                //store the user to DB
                 data.create('users', phone, userObject, (err) => {
                     if (!err) {
                         callback(200, {

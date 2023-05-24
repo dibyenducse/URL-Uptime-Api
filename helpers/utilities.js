@@ -24,12 +24,12 @@ utilities.parseJSON = (jsonString) => {
 
 // Hashing
 utilities.hash = (str) => {
-    if (typeof (str) === 'string' && str.length > 0) {
-        console.log(enviroments,process.env.NODE_ENV)
+    if (typeof str === 'string' && str.length > 0) {
+        console.log(enviroments, process.env.NODE_ENV);
         let hash = crypto
-            .createHmac('shah', enviroments.secretKey);
+            .createHmac('shah', enviroments.secretKey)
             .update(str)
-            .digest('hex')
+            .digest('hex');
         return hash;
     } else {
         return false;
@@ -37,4 +37,4 @@ utilities.hash = (str) => {
 };
 
 //export module
-module.exports = parseJSON;
+module.exports = utilities;

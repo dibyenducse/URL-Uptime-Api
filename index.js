@@ -9,6 +9,7 @@ Bloombrain
 const http = require('http');
 const { handleReqRes } = require('./helpers/handleReqRes');
 const data = require('./lib/data');
+const enviroment = require('./helpers/enviroments');
 
 // App object- module scaffolfing
 const app = {};
@@ -39,8 +40,9 @@ app.config = {
 
 app.createServer = () => {
     const server = http.createServer(app.handleReqRes);
-    server.listen(app.config.port, () => {
-        console.log(`Listenting to port ${app.config.port}`);
+    server.listen(enviroment.port, () => {
+        console.log(`enviroment variablr is ${process.env.NODE_ENV}`);
+        console.log(`Listenting to port ${enviroment.port}`);
     });
 };
 
