@@ -20,10 +20,6 @@ handler.userHandler = (requestProperties, callback) => {
     } else {
         callback(405); //request don't allow
     }
-
-    callback(200, {
-        message: 'This is a user url',
-    });
 };
 
 //another module scuffolding
@@ -52,14 +48,20 @@ handler._users.post = (requestProperties, callback) => {
         requestProperties.body.password.trim().length > 0
             ? requestProperties.body.password
             : false;
-    const tosAgreement =
-        typeof requestProperties.body.tosAgreement === 'boolean' &&
-        requestProperties.body.tosAgreement.length > 0
-            ? requestProperties.body.tosAgreement
-            : false;
+    // const tosAgreement =
+    //     typeof requestProperties.body.tosAgreement === 'boolean'
+    //         ? requestProperties.body.tosAgreement
+    //         : null;
 
-    if (firstName && lastName && phone && password && tosAgreement) {
+    console.log(firstName);
+    console.log(lastName);
+    console.log(phone);
+    console.log(password);
+    // console.log(tosAgreement);
+
+    if (firstName && lastName && phone && password) {
         //make sure that user doesn't exist
+
         data.read('users', phone, (err) => {
             if (err) {
                 let userObject = {
@@ -67,7 +69,7 @@ handler._users.post = (requestProperties, callback) => {
                     lastName,
                     phone,
                     password: hash(password),
-                    tosAgreement,
+                    //tosAgreement,
                 };
 
                 //store the user to DB
