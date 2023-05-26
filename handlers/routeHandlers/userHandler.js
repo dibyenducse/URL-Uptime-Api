@@ -125,7 +125,74 @@ handler._users.get = (requestProperties, callback) => {
 };
 
 //update existing user data
-handler._users.put = (requestProperties, callback) => {};
+handler._users.put = (requestProperties, callback) => {
+    //check the user details if valid
+    const firstName =
+        typeof requestProperties.body.firstName === 'string' &&
+        requestProperties.body.firstName.trim().length > 0
+            ? requestProperties.body.firstName
+            : false;
+    const lastName =
+        typeof requestProperties.body.lastName === 'string' &&
+        requestProperties.body.lastName.trim().length > 0
+            ? requestProperties.body.lastName
+            : false;
+    const phone =
+        typeof requestProperties.body.phone === 'string' &&
+        requestProperties.body.phone.trim().length === 11
+            ? requestProperties.body.phone
+            : false;
+    const password =
+        typeof requestProperties.body.password === 'string' &&
+        requestProperties.body.password.trim().length > 0
+            ? requestProperties.body.password
+            : false;
+
+    if (phone) {
+        if (firstName || lastName || password) {
+            //lookup the user
+            data.read('users', phone, (err, userDetails) => {
+                const userData = { ...parseJSON(userDetails) };
+                if (!err && userData) {
+                    if (firstName) {
+                        userData.firstName = firstName;
+                    }
+                    if (lastName) {
+                        userData.lastName = lastName;
+                    }
+                    if (password) {
+                        userData.password = hash(password);
+                    }
+
+                    // restore or update to database
+                    data.update('users', phone, userData, (err) => {
+                        if (!err) {
+                            callback(200, {
+                                error: 'User was updated successfully!',
+                            });
+                        } else {
+                            callback(500, {
+                                error: 'There was a problem in the serverside',
+                            });
+                        }
+                    });
+                } else {
+                    callback(400, {
+                        error: 'you have a problem in your request!',
+                    });
+                }
+            });
+        } else {
+            callback(400, {
+                error: 'you have a problem in your request',
+            });
+        }
+    } else {
+        callback(400, {
+            error: 'Invalid phone number, please try again!',
+        });
+    }
+};
 
 handler._users.delete = (requestProperties, callback) => {};
 
