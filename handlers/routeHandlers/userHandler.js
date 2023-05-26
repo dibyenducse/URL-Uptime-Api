@@ -7,7 +7,7 @@ Author:Dibyendu
 
 //dependencies
 const data = require('../../lib/data');
-const { hash } = require('../../helpers/utilities');
+const { hash, parseJSON } = require('../../helpers/utilities');
 
 //module skuffloding
 const handler = {};
@@ -84,7 +84,7 @@ handler._users.post = (requestProperties, callback) => {
                 });
             } else {
                 callback(500, {
-                    error: 'There was a problem',
+                    error: 'User already exists',
                 });
             }
         });
@@ -95,8 +95,36 @@ handler._users.post = (requestProperties, callback) => {
     }
 };
 
-handler._users.get = (requestProperties, callback) => {};
+//send user details to client
+handler._users.get = (requestProperties, callback) => {
+    //check the phone number if valid
+    const phone =
+        typeof requestProperties.queryStringObject.phone === 'string' &&
+        requestProperties.queryStringObject.phone.trim().length === 11
+            ? requestProperties.queryStringObject.phone
+            : false;
 
+    if (phone) {
+        //find user data
+        data.read('users', phone, (err, userData) => {
+            const user = { ...parseJSON(userData) };
+            if (!err && user) {
+                delete user.password;
+                callback(200, user); //this is _.users.get function 'callback'
+            } else {
+                callback(404, {
+                    error: 'user was not found',
+                });
+            }
+        });
+    } else {
+        callback(404, {
+            error: 'user was not found',
+        });
+    }
+};
+
+//update existing user data
 handler._users.put = (requestProperties, callback) => {};
 
 handler._users.delete = (requestProperties, callback) => {};
