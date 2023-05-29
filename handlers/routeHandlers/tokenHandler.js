@@ -74,8 +74,34 @@ handler._token.post = (requestProperties, callback) => {
     }
 };
 
-//send user details to client
-handler._token.get = (requestProperties, callback) => {};
+//send token details to client
+handler._token.get = (requestProperties, callback) => {
+    //check the token id if valid
+    const id =
+        typeof requestProperties.queryStringObject.id === 'string' &&
+        requestProperties.queryStringObject.id.length === 21
+            ? requestProperties.queryStringObject.id
+            : false;
+    console.log(id);
+
+    if (id) {
+        //find token
+        data.read('tokens', id, (err, tokenData) => {
+            const token = { ...parseJSON(tokenData) };
+            if (!err && token) {
+                callback(200, token);
+            } else {
+                callback(404, {
+                    error: 'token was not found',
+                });
+            }
+        });
+    } else {
+        callback(404, {
+            error: 'Requested token was not found',
+        });
+    }
+};
 //update
 handler._token.put = (requestProperties, callback) => {};
 //delete token
