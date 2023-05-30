@@ -103,7 +103,32 @@ handler._token.get = (requestProperties, callback) => {
     }
 };
 //update
-handler._token.put = (requestProperties, callback) => {};
+handler._token.put = (requestProperties, callback) => {
+    const id =
+        typeof requestProperties.body.id === 'string' &&
+        requestProperties.body.id.trim().length === 11
+            ? requestProperties.id.phone
+            : false;
+    const extend =
+        typeof requestProperties.body.extend === 'boolean' &&
+        requestProperties.body.extend === true
+            ? true
+            : false;
+    if (id && extend) {
+        data.read('tokens', id, (err, tokenData) => {
+            if (parseJSON(tokenData).expires > Date.now()) {
+            } else {
+                callback(404, {
+                    error: 'Token already expired!',
+                });
+            }
+        });
+    } else {
+        callback(404, {
+            error: 'There was a problem in your request',
+        });
+    }
+};
 //delete token
 handler._token.delete = (requestProperties, callback) => {};
 
