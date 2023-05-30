@@ -106,17 +106,33 @@ handler._token.get = (requestProperties, callback) => {
 handler._token.put = (requestProperties, callback) => {
     const id =
         typeof requestProperties.body.id === 'string' &&
-        requestProperties.body.id.trim().length === 11
-            ? requestProperties.id.phone
+        requestProperties.body.id.trim().length === 21
+            ? requestProperties.body.id
             : false;
     const extend =
         typeof requestProperties.body.extend === 'boolean' &&
         requestProperties.body.extend === true
             ? true
             : false;
+
+    console.log(id);
+    console.log(extend);
+
     if (id && extend) {
         data.read('tokens', id, (err, tokenData) => {
+            let tokenObject = parseJSON(tokenData);
             if (parseJSON(tokenData).expires > Date.now()) {
+                tokenObject.expires = Date.now() + 60 * 60 * 1000;
+                //store the update token
+                data.update('tokens', id, tokenObject, (err) => {
+                    if (!err) {
+                        callback(200);
+                    } else {
+                        callback(500, {
+                            error: 'Update can not possible.',
+                        });
+                    }
+                });
             } else {
                 callback(404, {
                     error: 'Token already expired!',
@@ -125,7 +141,7 @@ handler._token.put = (requestProperties, callback) => {
         });
     } else {
         callback(404, {
-            error: 'There was a problem in your request',
+            error: 'id and extend are false',
         });
     }
 };
