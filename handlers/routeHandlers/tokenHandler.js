@@ -117,11 +117,11 @@ handler._token.put = (requestProperties, callback) => {
 
     console.log(id);
     console.log(extend);
-
+    //check the token if it valid or not
     if (id && extend) {
         data.read('tokens', id, (err, tokenData) => {
             let tokenObject = parseJSON(tokenData);
-            if (parseJSON(tokenData).expires > Date.now()) {
+            if (tokenObject.expires > Date.now()) {
                 tokenObject.expires = Date.now() + 60 * 60 * 1000;
                 //store the update token
                 data.update('tokens', id, tokenObject, (err) => {
@@ -146,6 +146,40 @@ handler._token.put = (requestProperties, callback) => {
     }
 };
 //delete token
-handler._token.delete = (requestProperties, callback) => {};
+handler._token.delete = (requestProperties, callback) => {
+    //check the token id if valid
+    const id =
+        typeof requestProperties.queryStringObject.id === 'string' &&
+        requestProperties.queryStringObject.id.trim().length === 21
+            ? requestProperties.queryStringObject.id
+            : false;
+    if (id) {
+        //lookup the token
+        data.read('tokens', id, (err, tokenData) => {
+            if (!err && tokenData) {
+                //delete token data
+                data.delete('tokens', id, (err) => {
+                    if (!err) {
+                        callback(200, {
+                            massage: 'Toke was successfully deleted',
+                        });
+                    } else {
+                        callback(500, {
+                            error: 'there was a problem in Delete',
+                        });
+                    }
+                });
+            } else {
+                callback(500, {
+                    error: 'there was a problem on token',
+                });
+            }
+        });
+    } else {
+        callback(400, {
+            error: 'Invalid token',
+        });
+    }
+};
 
 module.exports = handler;
