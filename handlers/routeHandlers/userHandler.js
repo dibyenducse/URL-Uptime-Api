@@ -230,23 +230,37 @@ handler._users.delete = (requestProperties, callback) => {
             ? requestProperties.queryStringObject.phone
             : false;
     if (phone) {
-        //lookup the user
-        data.read('users', phone, (err, userData) => {
-            if (!err && userData) {
-                data.delete('users', phone, (err) => {
-                    if (!err) {
-                        callback(200, {
-                            massage: 'User was successfully deleted',
+        //verify the token
+        let token =
+            typeof requestProperties.headersObject.token === 'string'
+                ? requestProperties.headersObject.token
+                : false;
+
+        tokenHandler._token.verify(token, phone, (tokenId) => {
+            if (tokenId) {
+                //lookup the user
+                data.read('users', phone, (err, userData) => {
+                    if (!err && userData) {
+                        data.delete('users', phone, (err) => {
+                            if (!err) {
+                                callback(200, {
+                                    massage: 'User was successfully deleted',
+                                });
+                            } else {
+                                callback(500, {
+                                    error: 'there was a problem in server side',
+                                });
+                            }
                         });
                     } else {
                         callback(500, {
-                            error: 'there was a problem in server side',
+                            error: 'there was a problem server side',
                         });
                     }
                 });
             } else {
-                callback(500, {
-                    error: 'there was a problem server side',
+                callback(403, {
+                    error: 'Authentication Failure',
                 });
             }
         });
