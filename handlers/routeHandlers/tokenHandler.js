@@ -9,6 +9,7 @@ Author:Dibyendu
 const data = require('../../lib/data');
 const { hash, parseJSON } = require('../../helpers/utilities');
 const { createRandomString } = require('../../helpers/utilities');
+const { token } = require('../../routes');
 
 //module skuffloding
 const handler = {};
@@ -27,7 +28,7 @@ handler.tokenHandler = (requestProperties, callback) => {
 
 handler._token = {};
 
-//new token create
+//new token create TODO AUTHENTICATION
 handler._token.post = (requestProperties, callback) => {
     const phone =
         typeof requestProperties.body.phone === 'string' &&
@@ -74,7 +75,7 @@ handler._token.post = (requestProperties, callback) => {
     }
 };
 
-//send token details to client
+//send token details to client  TODO AUTHENTICATION
 handler._token.get = (requestProperties, callback) => {
     //check the token id if valid
     const id =
@@ -102,7 +103,7 @@ handler._token.get = (requestProperties, callback) => {
         });
     }
 };
-//update
+//update TODO AUTHENTICATION
 handler._token.put = (requestProperties, callback) => {
     const id =
         typeof requestProperties.body.id === 'string' &&
@@ -145,7 +146,7 @@ handler._token.put = (requestProperties, callback) => {
         });
     }
 };
-//delete token
+//delete token TODO AUTHENTICATION
 handler._token.delete = (requestProperties, callback) => {
     //check the token id if valid
     const id =
@@ -180,6 +181,23 @@ handler._token.delete = (requestProperties, callback) => {
             error: 'Invalid token',
         });
     }
+};
+
+handler._token.verify = (id, phone, callback) => {
+    data.read('tokens', id, (err, tokenData) => {
+        if (!err && tokenData) {
+            if (
+                parseJSON(tokenData).phone === phone &&
+                parseJSON(tokenData).expires > Date.now()
+            ) {
+                callback(true);
+            } else {
+                callback(false);
+            }
+        } else {
+            callback(false);
+        }
+    });
 };
 
 module.exports = handler;

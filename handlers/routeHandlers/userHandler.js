@@ -8,6 +8,7 @@ Author:Dibyendu
 //dependencies
 const data = require('../../lib/data');
 const { hash, parseJSON } = require('../../helpers/utilities');
+const tokenHandler = require('./tokenHandler');
 
 //module skuffloding
 const handler = {};
@@ -105,15 +106,29 @@ handler._users.get = (requestProperties, callback) => {
             : false;
 
     if (phone) {
-        //find user data
-        data.read('users', phone, (err, userData) => {
-            const user = { ...parseJSON(userData) };
-            if (!err && user) {
-                delete user.password;
-                callback(200, user); //this is _.users.get function 'callback'
+        //verify the token
+        let token =
+            typeof requestProperties.headersObject.token === 'string'
+                ? requestProperties.headersObject.token
+                : false;
+
+        tokenHandler._token.verify(token, phone, (tokenId) => {
+            if (tokenId) {
+                //find user data
+                data.read('users', phone, (err, userData) => {
+                    const user = { ...parseJSON(userData) };
+                    if (!err && user) {
+                        delete user.password;
+                        callback(200, user); //this is _.users.get function 'callback'
+                    } else {
+                        callback(404, {
+                            error: 'user was not found',
+                        });
+                    }
+                });
             } else {
-                callback(404, {
-                    error: 'user was not found',
+                callback(403, {
+                    error: 'Authentication Failure',
                 });
             }
         });
@@ -150,20 +165,33 @@ handler._users.put = (requestProperties, callback) => {
 
     if (phone) {
         if (firstName || lastName || password) {
-            //lookup the user
-            data.read('users', phone, (err, userDetails) => {
-                const userData = { ...parseJSON(userDetails) };
-                if (!err && userData) {
-                    if (firstName) {
-                        userData.firstName = firstName;
-                    }
-                    if (lastName) {
-                        userData.lastName = lastName;
-                    }
-                    if (password) {
-                        userData.password = hash(password);
-                    }
+            //verify the token
+            let token =
+                typeof requestProperties.headersObject.token === 'string'
+                    ? requestProperties.headersObject.token
+                    : false;
 
+            tokenHandler._token.verify(token, phone, (tokenId) => {
+                if (tokenId) {
+                    //lookup the user
+                    data.read('users', phone, (err, userDetails) => {
+                        const userData = { ...parseJSON(userDetails) };
+                        if (!err && userData) {
+                            if (firstName) {
+                                userData.firstName = firstName;
+                            }
+                            if (lastName) {
+                                userData.lastName = lastName;
+                            }
+                            if (password) {
+                                userData.password = hash(password);
+                            }
+                        } else {
+                            callback(403, {
+                                error: 'Authentication Failure',
+                            });
+                        }
+                    });
                     // restore or update to database
                     data.update('users', phone, userData, (err) => {
                         if (!err) {
