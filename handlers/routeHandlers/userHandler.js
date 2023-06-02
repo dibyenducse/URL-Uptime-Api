@@ -186,21 +186,21 @@ handler._users.put = (requestProperties, callback) => {
                             if (password) {
                                 userData.password = hash(password);
                             }
+                            // restore or update to database
+                            data.update('users', phone, userData, (err) => {
+                                if (!err) {
+                                    callback(200, {
+                                        error: 'User was updated successfully!',
+                                    });
+                                } else {
+                                    callback(500, {
+                                        error: 'There was a problem in the serverside',
+                                    });
+                                }
+                            });
                         } else {
                             callback(403, {
                                 error: 'Authentication Failure',
-                            });
-                        }
-                    });
-                    // restore or update to database
-                    data.update('users', phone, userData, (err) => {
-                        if (!err) {
-                            callback(200, {
-                                error: 'User was updated successfully!',
-                            });
-                        } else {
-                            callback(500, {
-                                error: 'There was a problem in the serverside',
                             });
                         }
                     });
