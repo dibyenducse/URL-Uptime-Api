@@ -19,7 +19,7 @@ const { maxChecks } = require('../../helpers/enviroments');
 const handler = {};
 
 handler.checkHandler = (requestProperties, callback) => {
-    const acceptedMethods = ['put', 'get', 'post', 'delete'];
+    const acceptedMethods = ['PUT', 'GET', 'POST', 'DELETE'];
     //check the methods
     if (acceptedMethods.indexOf(requestProperties.method) > -1) {
         handler._check[requestProperties.method](requestProperties, callback);
@@ -46,7 +46,7 @@ handler._check.post = (requestProperties, callback) => {
             : false;
     let method =
         typeof requestProperties.body.method === 'string' &&
-        ['get', 'post', 'put', 'delete'].indexOf(
+        ['GET', 'POST', 'PUT', 'DELETE'].indexOf(
             requestProperties.body.method
         ) > -1
             ? requestProperties.body.method
@@ -110,13 +110,13 @@ handler._check.post = (requestProperties, callback) => {
                                                     userObject.checks =
                                                         userChecks;
                                                     userObject.checks.push(
-                                                        checkID
+                                                        checkId
                                                     );
 
                                                     //save the new user data
                                                     data.update(
                                                         'users',
-                                                        phone,
+                                                        userPhone,
                                                         userObject,
                                                         (err) => {
                                                             if (!err) {
