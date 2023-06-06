@@ -48,21 +48,29 @@ handler.handleReqRes = (req, res) => {
     //collect real data
     let realData = '';
 
+    //choose which handler function will call
+    //request er path theke routes object er vitor path dhukiye chosenHandler er assign hocche value hisebe
     var chosenHandler = routes[trimmedPath]
         ? routes[trimmedPath]
         : notFoundHandler;
     //var chosenHandler = routes[trimmedPath] || notFoundHandler;
 
+    //Data which came from request body
     req.on('data', (buffer) => {
         realData += decoder.write(buffer);
     });
 
+    //after finishing & getting Buffer Data
     req.on('end', () => {
         realData += decoder.end();
 
+        //input the real data to RequestProperties obj before call chosenHandler function
+
         requestProperties.body = parseJSON(realData);
 
+        //this function will call through different handler function
         chosenHandler(requestProperties, (statusCode, payload) => {
+            //every handler function will return a statuscode and paylod for response to client
             statusCode = typeof statusCode === 'number' ? statusCode : 500;
             payload = typeof payload === 'object' ? payload : {};
 

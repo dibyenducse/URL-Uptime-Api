@@ -41,7 +41,7 @@ data.delete('test', 'newFile', (err) => {
 app.createServer = () => {
     const server = http.createServer(app.handleReqRes);
     server.listen(enviroment.port, () => {
-        console.log(`enviroment variablr is ${process.env.NODE_ENV}`);
+        console.log(`enviroment variable is ${process.env.NODE_ENV}`);
         console.log(`Listenting to port ${enviroment.port}`);
     });
 };
