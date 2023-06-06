@@ -15,7 +15,7 @@ const { maxChecks } = require('../../helpers/enviroments');
 const handler = {};
 
 handler.checkHandler = (requestProperties, callback) => {
-    const acceptedMethods = ['PUT', 'GET', 'POST', 'DELETE'];
+    const acceptedMethods = ['put', 'get', 'post', 'delete'];
     //check the methods
     if (acceptedMethods.indexOf(requestProperties.method) > -1) {
         handler._check[requestProperties.method](requestProperties, callback);
@@ -168,7 +168,42 @@ handler._check.post = (requestProperties, callback) => {
             };
 };
 
-handler._check.get = (requestProperties, callback) => {};
+handler._check.get = (requestProperties, callback) => {
+    //check the phone number if valid
+    const phone =
+        typeof requestProperties.queryStringObject.phone === 'string' &&
+            requestProperties.queryStringObject.phone.trim().length === 11
+            ? requestProperties.queryStringObject.phone
+            : false;
+
+    if (phone) {
+        //verify the token
+        let token =
+            typeof requestProperties.headersObject.token === 'string'
+                ? requestProperties.headersObject.token
+                : false;
+
+        tokenHandler._token.verify(token, phone, (tokenId) => {
+            if (tokenId) {
+                //find user data
+                data.read('users', phone, (err, userData) => {
+                    const user = { ...parseJSON(userData) };
+                    if (!err && user) {
+                        delete user.password;
+                        callback(200, user); //this is _.users.get function 'callback'
+                    } else {
+                        callback(404, {
+                            error: 'user was not found',
+                        });
+                    }
+                });
+            } else {
+                callback(403, {
+                    error: 'Authentication Failure',
+                });
+            }
+        })
+}
 
 handler._check.put = (requestProperties, callback) => {};
 
