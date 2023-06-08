@@ -45,7 +45,7 @@ handler._token.post = (requestProperties, callback) => {
             let hashedPassword = hash(password);
             if (hashedPassword === parseJSON(userData).password) {
                 const tokenId = createRandomString(20);
-                const expires = Date.now() + 60 * 60 * 1000;
+                const expires = Date.now() + 1200 * 60 * 1000;
                 const tokenObject = {
                     phone,
                     id: tokenId,
