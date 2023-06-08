@@ -71,17 +71,17 @@ handler._check.post = (requestProperties, callback) => {
         console.log(method);
         console.log(successCodes);
         console.log(timeOutSeconds);
-        //lookup the userphone by reading token
+        //lookup the user's phone by reading token
         data.read('tokens', token, (err, tokenData) => {
             if (!err && tokenData) {
                 let userPhone = parseJSON(tokenData).phone;
                 console.log(userPhone);
                 //lookup the user data
-                data.read('users', userPhone, (err, userData) => {
+                data.read('users', phone, (err, userData) => {
                     if (!err && userData) {
                         tokenHandler._token.verify(
                             token,
-                            userPhone,
+                            phone,
                             (tokenIsValid) => {
                                 if (tokenIsValid) {
                                     userObject = parseJSON(userData);
@@ -94,7 +94,7 @@ handler._check.post = (requestProperties, callback) => {
                                         const checkId = createRandomString(20);
                                         const checkObjects = {
                                             id: checkId,
-                                            userPhone: userPhone,
+                                            userPhone: phone,
                                             protocol: protocol,
                                             url: url,
                                             method: method,
@@ -144,7 +144,7 @@ handler._check.post = (requestProperties, callback) => {
                                         );
                                     } else {
                                         callback(403, {
-                                            error: 'User not found ',
+                                            error: 'User has already reached max check limit. ',
                                         });
                                     }
                                 }
@@ -152,7 +152,7 @@ handler._check.post = (requestProperties, callback) => {
                         );
                     } else {
                         callback(403, {
-                            error: 'User not found ',
+                            error: 'User not found in database.',
                         });
                     }
                 });
