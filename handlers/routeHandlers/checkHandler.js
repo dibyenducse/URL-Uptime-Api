@@ -57,7 +57,7 @@ handler._check.post = (requestProperties, callback) => {
         requestProperties.body.timeOutSeconds % 1 === 0 &&
         requestProperties.body.timeOutSeconds >= 1 &&
         requestProperties.body.timeOutSeconds <= 5
-            ? requestProperties.body.timeOutSeconds
+            ? requestProperties.body.successCodes
             : false;
 
     if (protocol && url && method && successCodes && timeOutSeconds) {
@@ -75,6 +75,7 @@ handler._check.post = (requestProperties, callback) => {
         data.read('tokens', token, (err, tokenData) => {
             if (!err && tokenData) {
                 let userPhone = parseJSON(tokenData).phone;
+                console.log(userPhone);
                 //lookup the user data
                 data.read('users', userPhone, (err, userData) => {
                     if (!err && userData) {
