@@ -171,12 +171,48 @@ handler._check.post = (requestProperties, callback) => {
 };
 
 handler._check.get = (requestProperties, callback) => {
-    //check the phone number if valid
-    const phone =
-        typeof requestProperties.queryStringObject.phone === 'string' &&
-        requestProperties.queryStringObject.phone.trim().length === 11
-            ? requestProperties.queryStringObject.phone
+    //check the token id if valid
+    const id =
+        typeof requestProperties.queryStringObject.id === 'string' &&
+        requestProperties.queryStringObject.id.length === 21
+            ? requestProperties.queryStringObject.id
             : false;
+    console.log(id);
+
+    if (id) {
+        //look up the check
+        data.read('checks', id, (err, checkData) => {
+            if (!err && checkData) {
+                //token check
+                const token =
+                    typeof requestProperties.headersObject.token === 'string'
+                        ? requestProperties.headersObject.token
+                        : false;
+
+                tokenHandler._token.verify(
+                    token,
+                    parseJSON(checkData).phone,
+                    (tokenIsValid) => {
+                        if (tokenIsValid) {
+                            callback(200, parseJSON(checkData));
+                        } else {
+                            callback(403, {
+                                error: 'Authentication Failure!',
+                            });
+                        }
+                    }
+                );
+            } else {
+                callback(500, {
+                    error: 'there was in server',
+                });
+            }
+        });
+    } else {
+        callback(400, {
+            error: 'you have problem in your request',
+        });
+    }
 };
 
 handler._check.put = (requestProperties, callback) => {};
