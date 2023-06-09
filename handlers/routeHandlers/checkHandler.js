@@ -52,21 +52,21 @@ handler._check.post = (requestProperties, callback) => {
         requestProperties.body.successCodes instanceof Array
             ? requestProperties.body.successCodes
             : false;
-    let timeOutSeconds =
-        typeof requestProperties.body.timeOutSeconds === 'number' &&
-        requestProperties.body.timeOutSeconds % 1 === 0 &&
-        requestProperties.body.timeOutSeconds > 1 &&
-        requestProperties.body.timeOutSeconds < 5
-            ? requestProperties.body.timeOutSeconds
-            : false;
+    // let timeOutSeconds =
+    //     typeof requestProperties.body.timeOutSeconds === 'number' &&
+    //     requestProperties.body.timeOutSeconds % 1 === 0 &&
+    //     requestProperties.body.timeOutSeconds > 1 &&
+    //     requestProperties.body.timeOutSeconds < 5
+    //         ? requestProperties.body.timeOutSeconds
+    //         : false;
 
     console.log(protocol);
     console.log(url);
     console.log(method);
     console.log(successCodes);
-    console.log(timeOutSeconds);
+    //console.log(timeOutSeconds);
 
-    if (protocol && url && method && successCodes && timeOutSeconds) {
+    if (protocol && url && method && successCodes) {
         //token check
         let token =
             typeof requestProperties.headersObject.token === 'string'
@@ -79,11 +79,11 @@ handler._check.post = (requestProperties, callback) => {
                 let userPhone = parseJSON(tokenData).phone;
                 console.log(userPhone);
                 //lookup the user data
-                data.read('users', phone, (err, userData) => {
+                data.read('users', userPhone, (err, userData) => {
                     if (!err && userData) {
                         tokenHandler._token.verify(
                             token,
-                            phone,
+                            userPhone,
                             (tokenIsValid) => {
                                 if (tokenIsValid) {
                                     userObject = parseJSON(userData);
@@ -96,12 +96,11 @@ handler._check.post = (requestProperties, callback) => {
                                         const checkId = createRandomString(20);
                                         const checkObjects = {
                                             id: checkId,
-                                            userPhone: phone,
+                                            phone: userPhone,
                                             protocol: protocol,
                                             url: url,
                                             method: method,
                                             successCodes: successCodes,
-                                            timeOutSeconds: timeOutSeconds,
                                         };
                                         console.log(checkObjects);
                                         //save the object
@@ -121,7 +120,7 @@ handler._check.post = (requestProperties, callback) => {
                                                     //save the new user data
                                                     data.update(
                                                         'users',
-                                                        phone,
+                                                        userPhone,
                                                         userObject,
                                                         (err) => {
                                                             if (!err) {
