@@ -14,7 +14,7 @@ const notification = {};
 
 //send sms to user using twilio api
 notification.sendTwilioSms = (phone, sms, callback) => {
-    //input validation
+    //input validation, twilio recommandation
     const userPhone =
         typeof phone === 'string' && phone.trim().length === 11
             ? phone.trim()
