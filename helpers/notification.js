@@ -19,8 +19,12 @@ notification.sendTwilioSms = (phone, msg, callback) => {
         typeof phone === 'string' && phone.trim().length === 11
             ? phone.trim()
             : false;
-    const userMsg = typeof msg === 'string' && ff;
-    msg.trim().length > 0 && msg.trim().length < 1600 ? msg.trim() : false;
+    const userMsg =
+        typeof msg === 'string' &&
+        msg.trim().length > 0 &&
+        msg.trim().length < 1600
+            ? msg.trim()
+            : false;
     if (userPhone && userMsg) {
         //configure the request payload
 
@@ -49,7 +53,7 @@ notification.sendTwilioSms = (phone, msg, callback) => {
             //calllback successfully if the request went through
             if (status === 200 || status === 201) {
             } else {
-                callback(`Status code returned was $(status)`);
+                callback(`Status code returned was ${status}`);
             }
         });
 
@@ -64,4 +68,4 @@ notification.sendTwilioSms = (phone, msg, callback) => {
     }
 };
 
-exports.module = notification;
+module.exports = notification;

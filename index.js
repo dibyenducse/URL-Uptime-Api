@@ -10,11 +10,15 @@ const http = require('http');
 const { handleReqRes } = require('./helpers/handleReqRes');
 const data = require('./lib/data');
 const enviroment = require('./helpers/enviroments');
+const { sendTwilioSms } = require('./helpers/notification');
 
 // App object- module scaffolfing
 const app = {};
 
 //For testing
+sendTwilioSms('01671379417', 'Hello World', (err) => {
+    console.log(err);
+});
 /*
 data.create(
     'test',

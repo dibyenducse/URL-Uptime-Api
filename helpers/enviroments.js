@@ -16,7 +16,7 @@ enviroments.staging = {
     secretKey: 'gsdfdsfgdsg',
     maxChecks: 5,
     twilion: {
-        fromPhone: '',
+        fromPhone: '01717912422',
         AccountSid: 'ACbc3ba0a51f3a66af6638235543a6cb30',
         AuthToken: '1eb57cbf52bc2906670d62ed6e9dbb8e',
     },
