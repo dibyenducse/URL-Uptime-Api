@@ -42,6 +42,23 @@ notification.sendTwilioSms = (phone, msg, callback) => {
                 'Content-Type': 'aplication/x=ww=form-urlencoded',
             },
         };
+        //instantiate request object
+        const req = https.request(requestDetails, (res) => {
+            //get the status of the sent request
+            const status = res.statusCode;
+            //calllback successfully if the request went through
+            if (status === 200 || status === 201) {
+            } else {
+                callback(`Status code returned was $(status)`);
+            }
+        });
+
+        req.on('error', (e) => {
+            callback(e);
+        });
+
+        req.write(stringifyPayload);
+        req.end();
     } else {
         callback('Given input invalid');
     }

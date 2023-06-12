@@ -7,5 +7,3 @@ const client = require('twilio')(accountSid, authToken);
 client.messages
     .create({ body: 'Hello from Twilio', from: '', to: '+8801717912422' })
     .then((message) => console.log(message.sid));
-
-console.log(client.messages.create());
