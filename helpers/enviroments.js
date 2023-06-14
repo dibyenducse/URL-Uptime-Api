@@ -25,7 +25,7 @@ enviroments.production = {
     port: 5000,
     evnName: 'production',
     secretKey: 'd5fdf5sdf2zxfc',
-    maxChecks: 5,
+    maxChecks: 10,
     twilion: {
         fromPhone: '',
         AccountSid: 'ACbc3ba0a51f3a66af6638235543a6cb30',
