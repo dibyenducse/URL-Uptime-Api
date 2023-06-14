@@ -14,7 +14,7 @@ enviroments.staging = {
     port: 3000,
     envName: 'staging',
     secretKey: 'gsdfdsfgdsg',
-    maxChecks: 5,
+    maxChecks: 50,
     twilion: {
         fromPhone: '01717912422',
         AccountSid: 'ACbc3ba0a51f3a66af6638235543a6cb30',
